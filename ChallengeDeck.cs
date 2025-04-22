@@ -1,5 +1,6 @@
 ﻿using ChallengeDeck.Modules;
 using MelonLoader;
+using System;
 
 namespace ChallengeDeck
 {
@@ -7,6 +8,7 @@ namespace ChallengeDeck
     {
         internal static Game Game { get; private set; }
         internal static new HarmonyLib.Harmony Harmony { get; private set; }
+        private static bool _criticalErrorOccurred  = false;
         public override void OnLateInitializeMelon()
         {
             Game = Singleton<Game>.Instance;
@@ -16,19 +18,32 @@ namespace ChallengeDeck
 
             CheckToggleAnticheat();
 
-            ApplyPatches();
+            ApplyAllPatches();
             AlwaysGifts.Activate();
             MikeyMode.Activate();
             CustomGhosts.ValidateGhostName();
         }
-        private void ApplyPatches()
+        private void ApplyAllPatches()
         {
-            CustomGhosts.Patch(Settings.UseCustomGhosts.Value);
-            DisplayGiftTime.Patch(Settings.DisplayGiftTime.Value);
-            DisplayDemonCount.Patch(Settings.DisplayDemonCount.Value);
-            BoofMode.Patch(Settings.BoofMode.Value);
-            MikeyMode.Patch(Settings.MikeyMode.Value);
-            UnlockLevelGate.Patch(Settings.UnlockLevelGate.Value);
+            ApplyPatch(CustomGhosts.Patch, Settings.UseCustomGhosts.Value, false);
+            ApplyPatch(DisplayGiftTime.Patch, Settings.DisplayGiftTime.Value, false);
+            ApplyPatch(DisplayDemonCount.Patch, Settings.DisplayDemonCount.Value, false);
+            ApplyPatch(BoofMode.Patch, Settings.BoofMode.Value);
+            ApplyPatch(MikeyMode.Patch, Settings.MikeyMode.Value);
+            ApplyPatch(UnlockLevelGate.Patch, Settings.UnlockLevelGate.Value);
+        }
+        private void ApplyPatch(Action<bool> patch, bool apply, bool serious=true)
+        {
+            try
+            {
+                patch(apply);
+            }
+            catch (Exception ex)
+            {
+                _criticalErrorOccurred  = _criticalErrorOccurred  | serious;
+                CheckToggleAnticheat();
+                MelonLogger.Error($"[{patch.Method.DeclaringType.FullName}] failed with value `{apply}`.\nException: {ex}");
+            }
         }
         public override void OnSceneWasLoaded(int buildindex, string sceneName)
         {
@@ -38,7 +53,7 @@ namespace ChallengeDeck
         public override void OnPreferencesSaved()
         {
             CheckToggleAnticheat();
-            ApplyPatches();
+            ApplyAllPatches();
             CustomGhosts.ValidateGhostName();
         }
         private void CheckToggleAnticheat(bool canDisable = false)
@@ -47,7 +62,7 @@ namespace ChallengeDeck
                 || Settings.MikeyMode.Value
                 || Settings.UnlockLevelGate.Value;
 
-            if (triggerAnticheat)
+            if (triggerAnticheat | _criticalErrorOccurred )
                 NeonLite.Modules.Anticheat.Register(MelonAssembly);
             else if (canDisable)
                 NeonLite.Modules.Anticheat.Unregister(MelonAssembly);
