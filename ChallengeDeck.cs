@@ -26,7 +26,7 @@ namespace ChallengeDeck
         private void ApplyAllPatches()
         {
             ApplyPatch(CustomGhosts.Patch, Settings.UseCustomGhosts.Value, false);
-            ApplyPatch(DisplayGiftTime.Patch, Settings.DisplayGiftTime.Value, false);
+            ApplyPatch(AlwaysGifts.Patch, Settings.AlwaysGifts.Value, false);
             ApplyPatch(DisplayDemonCount.Patch, Settings.DisplayDemonCount.Value, false);
             ApplyPatch(BoofMode.Patch, Settings.BoofMode.Value);
             ApplyPatch(MikeyMode.Patch, Settings.MikeyMode.Value);
@@ -73,7 +73,6 @@ namespace ChallengeDeck
             public static MelonPreferences_Entry<bool> UseCustomGhosts;
             public static MelonPreferences_Entry<string> CustomGhostName;
             public static MelonPreferences_Entry<bool> AlwaysGifts;
-            public static MelonPreferences_Entry<bool> DisplayGiftTime;
             public static MelonPreferences_Entry<bool> DisplayDemonCount;
             public static MelonPreferences_Entry<bool> BoofMode;
             public static MelonPreferences_Entry<bool> MikeyMode;
@@ -84,8 +83,7 @@ namespace ChallengeDeck
                 Category = MelonPreferences.CreateCategory("Challenge Deck");
                 UseCustomGhosts = Category.CreateEntry("Use Custom Ghosts", false, description: "Enable to use and update a different ghost, identified by the name below!\nUseful for separating your IL ghost from your challenge run ghosts.\nDISABLE NeonLite/Optimizations/Cache Ghosts to work as expected.");
                 CustomGhostName = Category.CreateEntry("Ghost Name", "mikeyghost", description: "Name of the custom ghost to race against and update!\nOnly use letters, numbers, spaces, hyphens, or underscores. Do not use symbols like / \\ : * ? \" < > |.\nMay have to exit and re-enter level to take effect.");
-                AlwaysGifts = Category.CreateEntry("Gifts Always Spawn", false, description: "Makes level gifts spawn even if they've already been collected.");
-                DisplayGiftTime = Category.CreateEntry("Display Gift Time", false, description: "Displays the time when you collect a gift.");
+                AlwaysGifts = Category.CreateEntry("Gifts Always Spawn", false, description: "Makes level gifts spawn even if they've already been collected. Also displays gift collection time.");
                 DisplayDemonCount = Category.CreateEntry("Demon Count Everywhere", false, description: "Displays the demon count on every level, including Chapter 11 and sidequest levels.");
                 BoofMode = Category.CreateEntry("Boof Mode", false, description: "Start every level with a book of life card!\nEnabling triggers anticheat. To disable anticheat, turn off all anticheat-related settings and return to the hub.");
                 MikeyMode = Category.CreateEntry("Mikey Mode", false, description: "Replaces all card pickups with Dominion cards as though you were playing Mikey Rush.\nEnabling triggers anticheat. To disable anticheat, turn off all anticheat-related settings and return to the hub.");

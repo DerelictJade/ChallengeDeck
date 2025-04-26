@@ -72,7 +72,6 @@
     <Compile Include="Modules\BoofMode.cs" />
     <Compile Include="ChallengeDeck.cs" />
     <Compile Include="Modules\DisplayDemonCount.cs" />
-    <Compile Include="Modules\DisplayGiftTime.cs" />
     <Compile Include="Modules\MikeyMode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Modules\UnlockLevelGate.cs" />
