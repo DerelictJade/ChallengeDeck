@@ -48,7 +48,12 @@ namespace ChallengeDeck
                 DoPatch();
             else
                 UndoPatch();
+            ValidateGhostName();
             _patched = apply;
+        }
+        public static void GhostNameChanged(bool _)
+        {
+            ValidateGhostName();
         }
         private static void DoPatch()
         {
@@ -134,7 +139,7 @@ namespace ChallengeDeck
             string settingName = ChallengeDeck.Settings.CustomGhostName.Value;
             return settingName + ".phant";
         }
-        public static void ValidateGhostName()
+        private static void ValidateGhostName()
         {
             string name = ChallengeDeck.Settings.CustomGhostName.Value;
             if (string.IsNullOrEmpty(name))

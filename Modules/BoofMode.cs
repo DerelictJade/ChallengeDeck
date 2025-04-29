@@ -2,7 +2,7 @@
 using System.Reflection;
 using UnityEngine.SceneManagement;
 
-namespace ChallengeDeck
+namespace ChallengeDeck.Modules
 {
     internal class BoofMode
     {
@@ -38,7 +38,7 @@ namespace ChallengeDeck
             }
 
             GS.AddCard("RAPTURE");
-            LevelData currentLevel = Singleton<Game>.Instance.GetCurrentLevel();
+            LevelData currentLevel = ChallengeDeck.Game.GetCurrentLevel();
             foreach (DiscardLockData discardLockData in currentLevel.discardLockData)
                 for (int i = 0; i < discardLockData.cards.Count; i++)
                     if (discardLockData.cards[i].discardAbility == PlayerCardData.DiscardAbility.Telefrag)

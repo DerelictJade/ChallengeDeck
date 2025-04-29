@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
 using System.Reflection;
 
-namespace ChallengeDeck
+namespace ChallengeDeck.Modules
 {
     internal class UnlockLevelGate
     {
