@@ -3,8 +3,7 @@ The Ultimate Modded/Challenge Run Companion! Combines all the various fun mods, 
 
 ## Current Features
 * Custom Ghosts: Allows recording and playback of nameable, customised ghosts for different types of challenge/modded runs to not interfere with your normal ghosts
-* Always Gifts: Make level gifts spawn even if you've already collected them
-  * Display Gift Time: Displays time taken to collect level gifts
+* Always Gifts: Make level gifts spawn even if you've already collected them. Also displays time taken to collect level gifts
 * Demon Count Everywhere: Displays demons remaining counter on every level including sidequests and chapter 11
 * Boof Mode: A mode where you begin every level with a Boof of Life card
 * Mikey Mode: Play as though you were in a Mikey Rush, every card pickup in-game is replaced with a dominion pickup
