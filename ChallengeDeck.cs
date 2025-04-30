@@ -88,18 +88,14 @@ namespace ChallengeDeck
                 MelonPreferences_Entry<T> CreateSettingEntry<T>(Action<bool> patchCallback, string title, T defaultValue, string description = "", bool triggersAnticheat = false)
                 {
                     var entry = Category.CreateEntry(title, defaultValue, description: description);
-
-                    if (triggersAnticheat)
+                    entry.OnEntryValueChanged.Subscribe((before, after) =>
                     {
-                        entry.OnEntryValueChanged.Subscribe((before, after) =>
+                        if (triggersAnticheat & (bool)(object)after)
                         {
-                            if ((bool)(object)after)
-                            {
-                                modInstance.CheckToggleAnticheat();
-                            }
-                            patchCallback?.Invoke((bool)(object)after);
-                        });
-                    }
+                            modInstance.CheckToggleAnticheat();
+                        }
+                        patchCallback?.Invoke((bool)(object)after);
+                    });
                     return entry;
                 }
             }
