@@ -8,7 +8,6 @@ namespace ChallengeDeck
     {
         internal static Game Game { get; private set; }
         internal static new HarmonyLib.Harmony Harmony { get; private set; }
-        private static bool _criticalErrorOccurred  = false;
         public override void OnLateInitializeMelon()
         {
             Game = Singleton<Game>.Instance;
@@ -39,7 +38,7 @@ namespace ChallengeDeck
                 || Settings.MikeyMode.Value
                 || Settings.UnlockLevelGate.Value;
 
-            if (triggerAnticheat | _criticalErrorOccurred )
+            if (triggerAnticheat)
                 NeonLite.Modules.Anticheat.Register(MelonAssembly);
             else if (canDisable)
                 NeonLite.Modules.Anticheat.Unregister(MelonAssembly);
@@ -85,16 +84,16 @@ namespace ChallengeDeck
                     description: "End level gates always unlocked, regardless of demon count.\nEnabling triggers anticheat. To disable anticheat, turn off all anticheat-related settings and return to the hub.",
                     triggersAnticheat: true);
 
-                MelonPreferences_Entry<T> CreateSettingEntry<T>(Action<bool> patchCallback, string title, T defaultValue, string description = "", bool triggersAnticheat = false)
+                MelonPreferences_Entry<T> CreateSettingEntry<T>(Action<T> patchCallback, string title, T defaultValue, string description = "", bool triggersAnticheat = false)
                 {
                     var entry = Category.CreateEntry(title, defaultValue, description: description);
                     entry.OnEntryValueChanged.Subscribe((before, after) =>
                     {
-                        if (triggersAnticheat & (bool)(object)after)
+                        if (triggersAnticheat && after is bool boolValue && boolValue)
                         {
                             modInstance.CheckToggleAnticheat();
                         }
-                        patchCallback?.Invoke((bool)(object)after);
+                        patchCallback.Invoke(after);
                     });
                     return entry;
                 }

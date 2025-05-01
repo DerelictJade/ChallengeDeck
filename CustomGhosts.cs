@@ -7,7 +7,6 @@ using System.Reflection;
 using System.Text;
 using HarmonyLib;
 using MelonLoader;
-using NeonLite;
 using UnityEngine;
 
 namespace ChallengeDeck
@@ -28,11 +27,6 @@ namespace ChallengeDeck
 
         // LoadLevelDataCompressed prefix, to overwrite ghost loading
         static readonly MethodInfo oglldc = AccessTools.Method(typeof(GhostUtils), "LoadLevelDataCompressed");
-        //static readonly MethodInfo oglldc = AccessTools.Method(
-        //    typeof(GhostUtils),
-        //    "LoadLevelDataCompressed",
-        //    new Type[] {typeof(GhostSave).MakeByRefType(), typeof(GhostUtils.GhostType), typeof(ulong), typeof(Action)}
-        //);
         static readonly MethodInfo lldcprefixmi = typeof(CustomGhosts).GetMethod(nameof(LoadCustomGhost));
         static readonly HarmonyMethod lldcprefix = new HarmonyMethod(lldcprefixmi);
 
@@ -51,7 +45,7 @@ namespace ChallengeDeck
             ValidateGhostName();
             _patched = apply;
         }
-        public static void GhostNameChanged(bool _)
+        public static void GhostNameChanged(string newGhostName)
         {
             ValidateGhostName();
         }
