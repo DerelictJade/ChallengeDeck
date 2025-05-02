@@ -29,7 +29,10 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: MelonInfo(typeof(ChallengeDeck.ChallengeDeck), "Challenge Deck", "1.1.0", "DerelictJade, MOPSKATER")]
+[assembly: AssemblyVersion("1.1.1.0")]
+[assembly: AssemblyFileVersion("1.1.1.0")]
+
+[assembly: MelonInfo(typeof(ChallengeDeck.ChallengeDeck), "Challenge Deck", "1.1.1", "DerelictJade, MOPSKATER")]
 [assembly: MelonGame("Little Flag Software, LLC", "Neon White")]
 [assembly: MelonColor(255, 255, 82, 96)]
 [assembly: MelonAuthorColor(255, 255, 162, 187)]
