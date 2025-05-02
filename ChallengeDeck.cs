@@ -15,12 +15,20 @@ namespace ChallengeDeck
 
             Settings.Register(this);
 
-            CustomGhosts.Patch(Settings.UseCustomGhosts.Value);
-            AlwaysGifts.Patch(Settings.AlwaysGifts.Value);
-            DisplayDemonCount.Patch(Settings.DisplayDemonCount.Value);
-
             AlwaysGifts.Activate();
             MikeyMode.Activate();
+
+            Game.OnInitializationComplete += () =>
+            {
+                CheckToggleAnticheat();
+
+                CustomGhosts.Patch(Settings.UseCustomGhosts.Value);
+                AlwaysGifts.Patch(Settings.AlwaysGifts.Value);
+                DisplayDemonCount.Patch(Settings.DisplayDemonCount.Value);
+                BoofMode.Patch(Settings.BoofMode.Value);
+                MikeyMode.Patch(Settings.MikeyMode.Value);
+                UnlockLevelGate.Patch(Settings.UnlockLevelGate.Value);
+            };
         }
         public override void OnSceneWasLoaded(int buildindex, string sceneName)
         {
@@ -91,9 +99,6 @@ namespace ChallengeDeck
                         }
                         patchCallback.Invoke(after);
                     });
-
-                    if (triggersAnticheat)
-                        entry.Value = entry.DefaultValue;
                     
                     return entry;
                 }
