@@ -15,14 +15,9 @@ namespace ChallengeDeck
 
             Settings.Register(this);
 
-            CheckToggleAnticheat();
-
             CustomGhosts.Patch(Settings.UseCustomGhosts.Value);
             AlwaysGifts.Patch(Settings.AlwaysGifts.Value);
             DisplayDemonCount.Patch(Settings.DisplayDemonCount.Value);
-            BoofMode.Patch(Settings.BoofMode.Value);
-            MikeyMode.Patch(Settings.MikeyMode.Value);
-            UnlockLevelGate.Patch(Settings.UnlockLevelGate.Value);
 
             AlwaysGifts.Activate();
             MikeyMode.Activate();
@@ -62,7 +57,8 @@ namespace ChallengeDeck
                     triggersAnticheat: false);
 
                 CustomGhostName = CreateSettingEntry(CustomGhosts.GhostNameChanged, "Ghost Name", "mikeyghost",
-                    description: "Name of the custom ghost to race against and update!\nOnly use letters, numbers, spaces, hyphens, or underscores. Do not use symbols like / \\ : * ? \" < > |.\nMay have to exit and re-enter level to take effect.");
+                    description: "Name of the custom ghost to race against and update!\nOnly use letters, numbers, spaces, hyphens, or underscores. Do not use symbols like / \\ : * ? \" < > |.\nMay have to exit and re-enter level to take effect.",
+                    triggersAnticheat: false);
 
                 AlwaysGifts = CreateSettingEntry(Modules.AlwaysGifts.Patch, "Gifts Always Spawn", false,
                     description: "Makes level gifts spawn even if they've already been collected. Also displays gift collection time.",
@@ -95,6 +91,10 @@ namespace ChallengeDeck
                         }
                         patchCallback.Invoke(after);
                     });
+
+                    if (triggersAnticheat)
+                        entry.Value = entry.DefaultValue;
+                    
                     return entry;
                 }
             }
