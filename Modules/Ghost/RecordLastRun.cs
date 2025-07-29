@@ -42,7 +42,17 @@ namespace ChallengeDeck.Modules.Ghost
         public static bool ForceSaveLastRun()
         {
             if (ChallengeDeck.Settings.RecordLastRunAsGhost.Value)
-                GhostCore.SaveCustomGhost("last.phant", true);
+            {
+                try
+                {
+                    GhostCore.SaveCustomGhost("last.phant", true);
+                }
+                catch (Exception ex)
+                {
+                    MelonLogger.Warning($"Failed to save last run ghost: {ex}");
+                }
+
+            }
             return true;
         }
     }
