@@ -11,62 +11,13 @@ using UnityEngine;
 
 namespace ChallengeDeck
 {
-    internal class CustomGhosts
+    internal class GhostCore
     {
-        private static bool _patched = false;
-
-        // Original ghost save
-        static readonly MethodInfo ogsc = AccessTools.Method(typeof(GhostRecorder), "SaveCompressed");
-        static readonly MethodInfo scprefixmi = typeof(CustomGhosts).GetMethod(nameof(PreSaveCompressed));
-        static readonly HarmonyMethod scprefix = new HarmonyMethod(scprefixmi);
-
-        // SaveLevelData postfix method
-        static readonly MethodInfo ogsld = AccessTools.Method(typeof(GhostRecorder), "SaveLevelData");
-        static readonly MethodInfo sldpostfixmi = typeof(CustomGhosts).GetMethod(nameof(PostSaveLevelData));
-        static readonly HarmonyMethod sldpostfix = new HarmonyMethod(sldpostfixmi);
-
-        // LoadLevelDataCompressed prefix, to overwrite ghost loading
-        static readonly MethodInfo oglldc = AccessTools.Method(typeof(GhostUtils), "LoadLevelDataCompressed");
-        static readonly MethodInfo lldcprefixmi = typeof(CustomGhosts).GetMethod(nameof(LoadCustomGhost));
-        static readonly HarmonyMethod lldcprefix = new HarmonyMethod(lldcprefixmi);
-
         // Save those frames
         private static readonly FieldInfo framesField = typeof(GhostRecorder).GetField("m_recordingFrames", BindingFlags.NonPublic | BindingFlags.Instance);
         private static readonly FieldInfo indexField = typeof(GhostRecorder).GetField("m_recordingIndex", BindingFlags.NonPublic | BindingFlags.Instance);
 
-        public static void Patch(bool apply)
-        {
-            if (_patched == apply)
-                return;
-            if (apply)
-                DoPatch();
-            else
-                UndoPatch();
-            ValidateGhostName();
-            _patched = apply;
-        }
-        public static void GhostNameChanged(string newGhostName)
-        {
-            ValidateGhostName();
-        }
-        private static void DoPatch()
-        {
-            ChallengeDeck.Harmony.Patch(ogsc, prefix: scprefix);
-            ChallengeDeck.Harmony.Patch(ogsld, postfix: sldpostfix);
-            ChallengeDeck.Harmony.Patch(oglldc, prefix: lldcprefix);
-        }
-        private static void UndoPatch()
-        {
-            ChallengeDeck.Harmony.Unpatch(ogsc, scprefixmi);
-            ChallengeDeck.Harmony.Unpatch(ogsld, sldpostfixmi);
-            ChallengeDeck.Harmony.Unpatch(oglldc, lldcprefixmi);
-        }
-        public static bool PreSaveCompressed() => false; // Prevents regular ghost saving
-        public static void PostSaveLevelData()
-        {
-            SaveCustomGhost();
-        }
-        private static void SaveCustomGhost(string ghostName = null)
+        internal static void SaveCustomGhost(string ghostName = null, bool force = false)
         {
             if (LevelRush.IsLevelRush()) return; // Base game behaviour, no rush ghosts smh
 
@@ -86,7 +37,7 @@ namespace ChallengeDeck
             {
                 LoadLevelTotalTimeCompressedCustom(path, delegate (float result)
                 {
-                    if (result > totalTime) // compare previous ghost time against current run (in a stupid way)
+                    if (force || result > totalTime) // compare previous ghost time against current run (in a stupid way)
                         SaveCustomGhostInternal(recordingFrames, recordingIndex, path, ghostName, totalTime);
                 });
                 return;
@@ -132,20 +83,6 @@ namespace ChallengeDeck
         {
             string settingName = ChallengeDeck.Settings.CustomGhostName.Value;
             return settingName + ".phant";
-        }
-        private static void ValidateGhostName()
-        {
-            string name = ChallengeDeck.Settings.CustomGhostName.Value;
-            if (string.IsNullOrEmpty(name))
-                name = "default";
-
-            var invalidChars = Path.GetInvalidFileNameChars();
-            var sanitized = new string(name
-                .Trim()
-                .Select(c => invalidChars.Contains(c) ? '_' : c)
-                .ToArray());
-            name = string.IsNullOrWhiteSpace(sanitized) ? "default" : sanitized;
-            ChallengeDeck.Settings.CustomGhostName.Value = name;
         }
         private static void SaveCustomGhostInternal(GhostFrame[] framesToSave, int index, string path, string ghostName, float totalTime)
         {

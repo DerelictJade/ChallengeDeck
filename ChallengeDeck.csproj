@@ -67,11 +67,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CustomGhosts.cs" />
+    <Compile Include="Modules\Ghost\CustomGhosts.cs" />
+    <Compile Include="Modules\Ghost\GhostCore.cs" />
     <Compile Include="Modules\AlwaysGifts.cs" />
     <Compile Include="Modules\BoofMode.cs" />
     <Compile Include="ChallengeDeck.cs" />
     <Compile Include="Modules\DisplayDemonCount.cs" />
+    <Compile Include="Modules\Ghost\RecordLastRun.cs" />
     <Compile Include="Modules\MikeyMode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Modules\UnlockLevelGate.cs" />

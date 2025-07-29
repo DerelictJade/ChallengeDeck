@@ -9,7 +9,7 @@ namespace ChallengeDeck.Modules
     {
         private static bool _patched = false;
         static readonly MethodInfo ogdcp = AccessTools.Method(typeof(MechController), "DoCardPickup");
-        static readonly MethodInfo dcpprefixmi = typeof(AlwaysGifts).GetMethod(nameof(PostDoCardPickup));
+        static readonly MethodInfo dcpprefixmi = typeof(AlwaysGifts).GetMethod(nameof(PreDoCardPickup));
         static readonly HarmonyMethod dcpprefix = new HarmonyMethod(dcpprefixmi);
 
         private static bool _collectedGift = false;
@@ -50,7 +50,7 @@ namespace ChallengeDeck.Modules
             if (textObject)
                 textObject.SetActive(false);
         }
-        public static void PostDoCardPickup(PlayerCardData card)
+        public static void PreDoCardPickup(PlayerCardData card)
         {
             if (_collectedGift) return; // Stops this from running twice
             if (card && card.consumableType == PlayerCardData.ConsumableType.GiftCollectible)
