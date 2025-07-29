@@ -2,12 +2,17 @@
 The Ultimate Modded/Challenge Run Companion! Combines all the various fun mods, and more, into one.
 
 ## Current Features
-* Custom Ghosts: Allows recording and playback of nameable, customised ghosts for different types of challenge/modded runs to not interfere with your normal ghosts
+### For Modded Runs
 * Always Gifts: Make level gifts spawn even if you've already collected them. Also displays time taken to collect level gifts
 * Demon Count Everywhere: Displays demons remaining counter on every level including sidequests and chapter 11
 * Boof Mode: A mode where you begin every level with a Boof of Life card
 * Mikey Mode: Play as though you were in a Mikey Rush, every card pickup in-game is replaced with a dominion pickup
 * Early Level Gate Unlock: Play with no demon requirement! Start levels with the end goal already unlocked
+### For Ghosts
+* Custom Ghosts: Allows recording and playback of nameable, customised ghosts for different types of challenge/modded runs to not interfere with your normal ghosts
+* Record Last Run: Forces the game to save a ghost file for every level run, allowing ghost playback of DNFs, Gift% runs, or just silly routes for fun.
+  * To use the ghost, open the levels Ghost Directory and rename the "last.phant" file to something else. By default, "0.phant" is the name of the ghost file the game will use. The Custom Ghost feature (above) lets you use a ghost by a different name however.
+  * Changing ghosts manually will **not load immediately** if the NeonLite/Optimizations/Cache Ghosts is enabled.
 
 ## Installation and Usage
 * Install [MelonLoader](https://github.com/LavaGang/MelonLoader/releases/tag/v0.6.1) and add to your Neon White installation. Make sure you use v0.6.1.
